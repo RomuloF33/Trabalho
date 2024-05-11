@@ -1,0 +1,44 @@
+#Romulo Ferreria da Costa 
+#Matricula: 2012200772
+
+
+install.packages(c("quantmod", "TTR"))
+install.packages(c("dygraphs", "TTR"))
+
+# Carregar pacotes
+library(quantmod)
+library(TTR)
+library(dygraphs)
+
+
+# Definir símbolo da ação
+acao <- "AAPL"
+
+# Obter dados históricos
+getSymbols(acao, src = "yahoo")
+
+
+# Criar gráfico de candlestick
+chartSeries(AAPL, theme = "white", subset = "last 1 year")
+# Adicionar indicadores técnicos
+addBBands()
+
+
+# Calcular médias móveis de curto e longo prazo
+
+addSMA(n = c(50, 200), on = 1)
+addMACD()
+# Adicionar média móvel exponencial
+addVo() 
+
+# Calcular os retornos diários
+retorno <- dailyReturn(Cl(get(acao)))
+
+# Criar gráfico candlestick com os retornos
+chartSeries(retorno, subset = "last 2 months", theme = "white", TA = NULL) 
+
+# Criar dataframe com os retornos diários
+returns <- data.frame(Date = index(get(symbol)), Returns = dailyReturn(Cl(get(symbol))))
+
+# Mostrar os primeiros registros do dataframe
+tail(returns)
